@@ -1,0 +1,204 @@
+#%RAML 1.0 Library
+#version 1.0.0
+usage: Use the following traits for the APIs
+
+
+traits:
+  cacheable: !include traits/traitCacheable.raml
+  standard-error-response: !include traits/traitErrorResponse.raml
+
+  protocol-required:
+    protocols:
+      - HTTP
+      - HTTPS
+
+  secure-protocol-required:
+    protocols:
+     - HTTPS
+
+  
+  client-id-required:
+    headers:
+      client_id:
+        type: string
+      client_secret:
+        type: string
+    responses:
+      401:
+        description: Unauthorized or invalid client application credentials
+      500:
+        description: Bad response from authorization server, or WSDL SOAP Fault error
+  jwt:
+    headers:
+      authorization:
+        description: Bearer 
+        type: string
+    responses:
+      400:
+        description: Token was not provided.
+      401:
+        description: Bad or expired token. To fix, you should re-authenticate the user.
+      403:
+        description: The client id validation failed.
+      503:
+        description: Error communicating with JWKS serve
+	 
+  pagination:
+    queryParameters:
+      start-page:
+        description: Starting page number, first page is 1
+        type: integer
+        example: 1
+      page-size:
+        description: Maximum number of entries per page
+        type: integer
+        example: 10
+
+  content-type-required:
+    headers:
+      Content-Type:
+        type: string
+        example: application/json
+
+  content-length-required:
+    headers:
+      Content-Length:
+        type: integer
+        example: 20
+
+  last-modified-required:
+    headers:
+      Last-Modified:
+        type: datetime
+        example: Sun, 28 Feb 2016 16:41:41 GMT
+        format: rfc2616
+
+  content-language-required:
+    headers:
+      Content-Language:
+        type: string
+        example: en-CA
+
+  content-encoding-required:
+    headers:
+      Content-Encoding:
+        type: string
+        example: gzip
+
+  accept-required:
+    headers:
+      Accept:
+        description: Specify the media type of the response to be returned
+        type: string
+        example: application/json
+
+  x-client-name:
+    headers:
+      x-client-name:
+        displayName: Client App Name
+        example: SAP
+        description: The name of the calling API/Application
+        type: string
+
+  x-client-correlation-id:
+    headers:
+      x-client-correlation-id:
+        displayName: Caller Correlation Id
+        description: A unique transaction identifier sent by the caller/calling application that can be used for tracing purposes
+        type: string
+        example: e733ab0a-6da5-11e8-adc0-fa7ae01bbebc
+
+  x-correlation-id:
+    headers:
+      x-correlation-id:
+        displayName: Internal Correlation Id
+        description: A unique transaction identifier generated in MuleSoft by the experience api that can be used for tracing purposes
+        type: string
+        example: e733ab0a-6da5-11e8-adc0-fa7ae01bbebc
+
+  external-api-header-required:
+    headers:
+      x-client-name:
+        required: false
+      x-client-correlation-id:
+        required: false
+      x-correlation-id:
+        required: false
+        
+  internal-api-header-required:
+    headers:
+      x-correlation-id:
+        required: false
+
+
+
+#Security Schema Definitions
+securitySchemes:
+  basic-authentication-required: 
+    type: Basic Authentication
+    describedBy:
+      headers:
+        Authorization:
+          description: |
+            Basic Authentication - Used to send the Base64 encoded the client "id:secret" credentials
+          type: string
+  oauth_2_0:
+    description: |
+      This API supports OAuth 2.0 for authenticating all API requests.
+    type: OAuth 2.0
+    describedBy:
+      headers:
+        authorization:
+          description: |
+             Used to send a valid OAuth 2 access token. Do not use with the "access_token" query
+             string parameter.
+          type: string
+      queryParameters:
+        access_token:
+          description: |
+             Used to send a valid OAuth 2 access token. Do not use together with the "Authorization"
+             header
+          type: string
+      responses:
+        400:
+          description: Invalid token.
+        401:
+          description: |
+            Unauthorized or Connection error when connecting to the authorization server.
+        403:
+          description: |
+            Forbidden, invalid client application credentials.
+        500:
+          description: |
+            Bad response from authorization server, or WSDL SOAP Fault error.
+    settings:
+      authorizationUri: INSERT_OAUTH2_AUTHORIZATION_URI
+      accessTokenUri: INSERT_OAUTH2_ACCESS_TOKEN_URI
+      authorizationGrants: 
+      - client_credentials
+
+
+#Request or Response Type Definitions
+types:
+  health-check-response: !include datatypes/healthCheckResponse.raml
+  
+#Common Resouce Type Definitions
+resourceTypes:
+  health-check:
+    securedBy:
+      - basic-authentication-required
+    is:
+      - protocol-required
+      - external-api-header-required
+      - standard-error-response
+    get:
+      description: "Get health of the application"
+      queryParameters:
+        mode:
+          required: false
+          default: "default"
+      responses:
+        200:
+          body:
+            application/json: 
+              type: health-check-response

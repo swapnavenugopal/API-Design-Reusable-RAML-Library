@@ -1,0 +1,21 @@
+#%RAML 1.0 Trait
+usage: Apply this trait to any GET method that supports caching control
+
+responses: 
+  200:
+    headers: 
+      Cache-Control:
+        description: |
+          Activates caching and defines caching behavior through cache response directives.
+          Usually defines public or private (cacheable by proxy or not) and max-age for
+          resource.
+          See http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html for more information.
+        example: private, max-age=31536000
+      Expires:
+        description: |
+          Sets a date in RFC 1123 format which the cached resources should no longer 
+          be considered valid. If both the Expires header and max-age in the Cache-Control 
+          header are set, max-age will take precedence.
+        type: datetime
+        example: Tue, 18 Apr 2017 09:30:41 GMT
+        format: rfc2616

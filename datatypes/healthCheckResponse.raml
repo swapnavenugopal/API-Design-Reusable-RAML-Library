@@ -1,0 +1,17 @@
+#%RAML 1.0 DataType
+type: object
+displayName: healthCheckResponse
+properties: 
+  timestamp:
+    type: string
+    required: true
+    example: "2020-07-23T20:12:20.158-04:00"
+  status:
+    type: string
+    required: false
+    enum: ["Running", "Down", "Partial"]
+    example: "Running"
+  details:
+    type: object
+    required: false
+example: !include ../examples/healthCheckResponseExample.json

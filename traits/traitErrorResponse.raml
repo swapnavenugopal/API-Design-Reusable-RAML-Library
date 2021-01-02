@@ -1,0 +1,81 @@
+#%RAML 1.0 Trait
+usage: Standard error response structure
+
+responses:  
+  400:
+    description:
+      The server cannot or will not process the request due to something that is perceived to be a client error (e.g., malformed request syntax, invalid request message framing, or deceptive request routing).
+    body:
+      application/json:
+        type: !include ../datatypes/errorResponse.raml
+        example: !include ../examples/errorResponseExample-400.json
+  401:
+    description:
+      The supplied credentials are invalid.
+    body:
+      application/json:
+        type: !include ../datatypes/errorResponse.raml
+        example: !include ../examples/errorResponseExample-401.json
+  404:
+    description:
+      The server cannot find the requested resource.
+    body:
+      application/json:
+        type: !include ../datatypes/errorResponse.raml
+        example: !include ../examples/errorResponseExample-404.json
+  405:
+    description:
+      The request method is not allowed.
+    body:
+      application/json:
+        type: !include ../datatypes/errorResponse.raml
+        example: !include ../examples/errorResponseExample-405.json
+  406:
+    description:
+      The target resource does not have a current representation that would be acceptable to the user agent.
+    body:
+      application/json:
+        type: !include ../datatypes/errorResponse.raml
+        example: !include ../examples/errorResponseExample-406.json
+  408:
+    description:
+      The request to the server has been timedout.
+    body:
+      application/json:
+        type: !include ../datatypes/errorResponse.raml
+        example: !include ../examples/errorResponseExample-408.json
+  415:
+    description:
+      The accept header specified an unsupported media type.
+    body:
+      application/json: 
+        type: !include ../datatypes/errorResponse.raml
+        example: !include ../examples/errorResponseExample-415.json
+  429:
+    description:
+      Too many requests sent to the server.
+    body:
+      application/json: 
+        type: !include ../datatypes/errorResponse.raml
+        example: !include ../examples/errorResponseExample-429.json            
+  500:
+    description:
+      An internal processing error occurred while processing the API request.
+    body:
+      application/json:
+        type: !include ../datatypes/errorResponse.raml
+        example: !include ../examples/errorResponseExample-500.json
+  501:
+    description:
+      The method has not been implemented.
+    body:
+      application/json:
+        type: !include ../datatypes/errorResponse.raml
+        example: !include ../examples/errorResponseExample-501.json
+  503:
+    description:
+      Issues accessing the system.
+    body:
+      application/json:
+        type: !include ../datatypes/errorResponse.raml
+        example: !include ../examples/errorResponseExample-503.json

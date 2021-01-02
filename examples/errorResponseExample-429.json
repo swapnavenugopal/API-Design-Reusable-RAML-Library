@@ -1,0 +1,13 @@
+{
+  "success": false,
+  "appName": "reusable-raml-sample-api",
+  "appVersion": "1.0.0",
+  "correlationId": "690cf550-4789-11ea-abac-38f9d346c463",
+  "timestamp": "2020-02-04T15:03:29.325-05:00",
+  "errorDetails": [
+    {
+      "message": "Too Many Requests",
+      "details": "Client has sent too many requests in a given amount of time"
+    }
+  ]
+}
